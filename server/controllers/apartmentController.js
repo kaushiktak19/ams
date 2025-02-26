@@ -31,4 +31,14 @@ exports.editApartment = async (req, res) => {
   }
 };
 
-
+exports.getApartmentById = async (req, res) => {
+  try {
+    const apartment = await Apartment.findById(req.params.id);
+    if (!apartment) {
+      return res.status(404).json({ message: 'Apartment not found' });
+    }
+    res.status(200).json(apartment);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
