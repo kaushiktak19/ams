@@ -31,7 +31,7 @@ const InventoryEdit = () => {
       const fetchRoom = async () => {
         try {
           const response = await axios.get(
-            `http://localhost:5000/api/apartments/${id}/rooms/${roomId}`
+            `/api/apartments/${id}/rooms/${roomId}`
           );
           if (response.data) {
             setRoom(response.data);
@@ -81,12 +81,12 @@ const InventoryEdit = () => {
     try {
       if (isEditing) {
         await axios.put(
-          `http://localhost:5000/api/apartments/${id}/rooms/${roomId}`,
+          `/api/apartments/${id}/rooms/${roomId}`,
           room
         );
       } else {
         await axios.post(
-          `http://localhost:5000/api/apartments/${id}/rooms`,
+          `/api/apartments/${id}/rooms`,
           room
         );
       }

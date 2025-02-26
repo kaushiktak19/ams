@@ -33,7 +33,7 @@ const ApartmentForm = () => {
     if (id) {
       const fetchApartment = async () => {
         try {
-          const response = await axios.get(`http://localhost:5000/api/apartments/${id}`);
+          const response = await axios.get(`/api/apartments/${id}`);
           setFormData(response.data);
         } catch (error) {
           console.error("Error fetching apartment details:", error);
@@ -73,9 +73,9 @@ const ApartmentForm = () => {
 
     try {
       if (id) {
-        await axios.put(`http://localhost:5000/api/apartments/${id}`, formData);
+        await axios.put(`/api/apartments/${id}`, formData);
       } else {
-        await axios.post("http://localhost:5000/api/apartments", formData);
+        await axios.post("/api/apartments", formData);
       }
       navigate("/");
     } catch (error) {

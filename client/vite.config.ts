@@ -6,11 +6,7 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-      '/api': {
-        target: 'https://apartments-0h6y.onrender.com',
-        changeOrigin: true, 
-        secure: false,       
-      },
+      '/api': 'https://apartments-0h6y.onrender.com',
     },
   },
   resolve: {

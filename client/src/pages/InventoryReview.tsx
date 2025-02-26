@@ -27,7 +27,7 @@ const InventoryReview = () => {
   useEffect(() => {
     const fetchRooms = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/apartments/${id}/rooms`);
+        const response = await axios.get(`/api/apartments/${id}/rooms`);
         console.log("Rooms API Response:", response.data);
 
         // Ensure items is always an array and map it correctly

@@ -19,7 +19,7 @@ const HomePage = () => {
   useEffect(() => {
     const fetchApartments = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/apartments');
+        const response = await axios.get('/api/apartments/');
         setApartments(response.data);
       } catch (error) {
         console.error('Error fetching apartments:', error);
