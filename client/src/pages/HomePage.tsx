@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 interface Apartment {
   _id: string;
@@ -41,38 +43,36 @@ const HomePage = () => {
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Apartments</h1>
-      <button
-        onClick={handleAddApartment}
-        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4"
-      >
-        Add Apartment
-      </button>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <h1 className="text-4xl font-bold text-gray-800 dark:text-white mb-8">Apartments</h1>
+      <Button onClick={handleAddApartment} className="mb-8">
+        + Add Apartment
+      </Button>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {apartments.map((apartment) => (
-          <div
-            key={apartment._id}
-            className="border p-4 rounded shadow hover:shadow-md transition"
-          >
-            <h2 className="text-xl font-semibold">{apartment.address}</h2>
-            <p>Floor: {apartment.floor}</p>
-            <p>Access: {apartment.stairsOrElevator}</p>
-            <p>Size: {apartment.size} sqm</p>
-            <div className="mt-4 space-x-2">
-              <button
-                onClick={() => handleEditApartment(apartment._id)}
-                className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-1 px-3 rounded"
-              >
-                Edit
-              </button>
-              <button
-                onClick={() => handleViewDetails(apartment._id)}
-                className="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-3 rounded"
-              >
-                View Details
-              </button>
-            </div>
-          </div>
+          <Card key={apartment._id} className="hover:shadow-lg transition-shadow duration-300">
+            <CardHeader>
+              <CardTitle>{apartment.address}</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-gray-600 dark:text-gray-300">
+                <span className="font-medium">Floor:</span> {apartment.floor}
+              </p>
+              <p className="text-gray-600 dark:text-gray-300">
+                <span className="font-medium">Access:</span> {apartment.stairsOrElevator}
+              </p>
+              <p className="text-gray-600 dark:text-gray-300 mb-4">
+                <span className="font-medium">Size:</span> {apartment.size} sqm
+              </p>
+              <div className="flex space-x-3">
+                <Button variant="outline" onClick={() => handleEditApartment(apartment._id)}>
+                  Edit
+                </Button>
+                <Button variant="default" onClick={() => handleViewDetails(apartment._id)}>
+                  View Details
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
         ))}
       </div>
     </div>
