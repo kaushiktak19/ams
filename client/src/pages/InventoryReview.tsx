@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import axios from "axios";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Pencil, Plus } from "lucide-react";
+import api from "@/api/axios";
 
 interface Item {
   name: string;
@@ -27,7 +27,7 @@ const InventoryReview = () => {
   useEffect(() => {
     const fetchRooms = async () => {
       try {
-        const response = await axios.get(`/api/apartments/${id}/rooms`);
+        const response = await api.get(`/api/apartments/${id}/rooms`);
         console.log("Rooms API Response:", response.data);
 
         // Ensure items is always an array and map it correctly
@@ -74,7 +74,7 @@ const InventoryReview = () => {
             <CardTitle className="text-2xl font-bold">Inventory Details</CardTitle>
             <CardDescription>Please review your Inventory and add/edit if required.</CardDescription>
           </div>
-          <div className="bg-primary/10 text-primary rounded-md px-3 py-1 text-sm w-fit mx-auto">STEP 7/8</div>
+          <div className="bg-primary/10 text-primary rounded-md px-3 py-1 text-sm w-fit mx-auto">STEP 2/3</div>
         </CardHeader>
         <CardContent className="space-y-6">
           {/* Scrollable section for rooms */}

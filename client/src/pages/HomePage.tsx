@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import api from '@/api/axios';
 
 interface Apartment {
   _id: string;
@@ -19,7 +19,7 @@ const HomePage = () => {
   useEffect(() => {
     const fetchApartments = async () => {
       try {
-        const response = await axios.get('/api/apartments/');
+        const response = await api.get('/api/apartments/');
         setApartments(response.data);
       } catch (error) {
         console.error('Error fetching apartments:', error);

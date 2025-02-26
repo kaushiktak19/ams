@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import axios from "axios";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { StepBackIcon as Stairs, CableCarIcon as Elevator, Home, Info } from "lucide-react";
+import api from "@/api/axios";
 
 interface Apartment {
   address: string;
@@ -33,7 +33,7 @@ const ApartmentForm = () => {
     if (id) {
       const fetchApartment = async () => {
         try {
-          const response = await axios.get(`/api/apartments/${id}`);
+          const response = await api.get(`/api/apartments/${id}`);
           setFormData(response.data);
         } catch (error) {
           console.error("Error fetching apartment details:", error);
@@ -73,9 +73,9 @@ const ApartmentForm = () => {
 
     try {
       if (id) {
-        await axios.put(`/api/apartments/${id}`, formData);
+        await api.put(`/api/apartments/${id}`, formData);
       } else {
-        await axios.post("/api/apartments", formData);
+        await api.post("/api/apartments", formData);
       }
       navigate("/");
     } catch (error) {

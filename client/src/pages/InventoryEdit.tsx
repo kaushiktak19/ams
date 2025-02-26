@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import axios from "axios";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Trash2, Plus } from "lucide-react";
+import api from "@/api/axios";
 
 interface Item {
   name: string;
@@ -30,7 +30,7 @@ const InventoryEdit = () => {
       setIsEditing(true);
       const fetchRoom = async () => {
         try {
-          const response = await axios.get(
+          const response = await api.get(
             `/api/apartments/${id}/rooms/${roomId}`
           );
           if (response.data) {
@@ -80,12 +80,12 @@ const InventoryEdit = () => {
     e.preventDefault();
     try {
       if (isEditing) {
-        await axios.put(
+        await api.put(
           `/api/apartments/${id}/rooms/${roomId}`,
           room
         );
       } else {
-        await axios.post(
+        await api.post(
           `/api/apartments/${id}/rooms`,
           room
         );
@@ -119,7 +119,7 @@ const InventoryEdit = () => {
             </CardDescription>
           </div>
           <div className="bg-primary/10 text-primary rounded-md px-3 py-1 text-sm w-fit mx-auto">
-            STEP 7/8
+            STEP 3/3
           </div>
         </CardHeader>
 
