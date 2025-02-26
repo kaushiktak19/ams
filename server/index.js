@@ -21,5 +21,5 @@ const itemRoutes = require('./routes/item');
 app.use('/api/apartments', apartmentRoutes);
 app.use('/api/apartments', roomRoutes);  // Rooms are nested within apartments
 app.use('/api/apartments', itemRoutes)
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
