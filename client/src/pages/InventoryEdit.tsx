@@ -96,118 +96,126 @@ const InventoryEdit = () => {
     }
   };
 
+  // Validation for the form
+  const isValidItem = (item: Item) => item.name.trim() !== "";
+
+  const isValidForm = room.name.trim() !== "" && room.items.every(isValidItem);
+
   return (
-    <Card className="w-full max-w-3xl mx-auto">
-      <CardHeader className="space-y-2">
-        <div className="flex items-center justify-between">
-          <Button variant="outline" onClick={() => navigate(-1)}>
-            ← BACK
-          </Button>
-          <Button variant="outline">
-            <Plus className="h-4 w-4" />
-            <span>ADD MORE ROOMS VIA IMAGES</span>
-          </Button>
-        </div>
-        <div className="text-center space-y-1.5">
-          <CardTitle className="text-2xl font-bold">
-            {isEditing ? "Edit Room" : "Add Room"}
-          </CardTitle>
-          <CardDescription>
-            Please review your Inventory and add/edit if required.
-          </CardDescription>
-        </div>
-        <div className="bg-primary/10 text-primary rounded-md px-3 py-1 text-sm w-fit mx-auto">
-          STEP 7/8
-        </div>
-      </CardHeader>
+    <div className="flex justify-center items-center h-screen bg-gray-100">
+      <Card className="w-full max-w-3xl">
+        <CardHeader className="space-y-2">
+          <div className="flex items-center justify-between">
+            <Button variant="outline" onClick={() => navigate(-1)}>
+              ← BACK
+            </Button>
+          </div>
+          <div className="text-center space-y-1.5">
+            <CardTitle className="text-2xl font-bold">
+              {isEditing ? "Edit Room" : "Add Room"}
+            </CardTitle>
+            <CardDescription>
+              Please review your Inventory and add/edit if required.
+            </CardDescription>
+          </div>
+          <div className="bg-primary/10 text-primary rounded-md px-3 py-1 text-sm w-fit mx-auto">
+            STEP 7/8
+          </div>
+        </CardHeader>
 
-      <CardContent className="space-y-6">
-        <Input
-          placeholder="Enter Room Name"
-          value={room.name}
-          onChange={handleRoomNameChange}
-          className="text-lg"
-          required
-        />
+        <CardContent className="space-y-6">
+          <Input
+            placeholder="Enter Room Name"
+            value={room.name}
+            onChange={handleRoomNameChange}
+            className="text-lg"
+            required
+          />
 
-        <h2 className="text-xl font-semibold">Furniture Details</h2>
-        <div className="space-y-4">
-          {room.items.map((item, index) => (
-            <div
-              key={index}
-              className="bg-[#E8F8F8] rounded-lg p-4 flex justify-between items-start"
-            >
-              <div className="space-y-1">
-                <Input
-                  placeholder="Furniture Name"
-                  value={item.name}
-                  onChange={(e) =>
-                    handleItemChange(index, "name", e.target.value)
-                  }
-                  required
-                  className="bg-white"
-                />
-                <div className="grid grid-cols-3 gap-4 mt-2">
-                  <Input
-                    type="number"
-                    placeholder="Length (cm)"
-                    value={item.length}
-                    onChange={(e) =>
-                      handleItemChange(index, "length", e.target.value)
-                    }
-                    className="bg-white"
-                  />
-                  <Input
-                    type="number"
-                    placeholder="Width (cm)"
-                    value={item.width}
-                    onChange={(e) =>
-                      handleItemChange(index, "width", e.target.value)
-                    }
-                    className="bg-white"
-                  />
-                  <Input
-                    type="number"
-                    placeholder="Height (cm)"
-                    value={item.height}
-                    onChange={(e) =>
-                      handleItemChange(index, "height", e.target.value)
-                    }
-                    className="bg-white"
-                  />
+          <h2 className="text-xl font-semibold">Furniture Details</h2>
+
+          <div className="space-y-4">
+            {/* Scrollable section for furniture items */}
+            <div className="max-h-[300px] overflow-y-auto">
+              {room.items.map((item, index) => (
+                <div
+                  key={index}
+                  className="bg-[#E8F8F8] rounded-lg p-4 m-3 flex justify-between items-start"
+                >
+                  <div className="space-y-1 w-full">
+                    <Input
+                      placeholder="Furniture Name"
+                      value={item.name}
+                      onChange={(e) =>
+                        handleItemChange(index, "name", e.target.value)
+                      }
+                      required
+                      className="bg-white"
+                    />
+                    <div className="grid grid-cols-3 gap-4 mt-2">
+                      <Input
+                        type="number"
+                        placeholder="Length (cm)"
+                        value={item.length || ""}
+                        onChange={(e) =>
+                          handleItemChange(index, "length", e.target.value)
+                        }
+                        className="bg-white"
+                      />
+                      <Input
+                        type="number"
+                        placeholder="Width (cm)"
+                        value={item.width || ""}
+                        onChange={(e) =>
+                          handleItemChange(index, "width", e.target.value)
+                        }
+                        className="bg-white"
+                      />
+                      <Input
+                        type="number"
+                        placeholder="Height (cm)"
+                        value={item.height || ""}
+                        onChange={(e) =>
+                          handleItemChange(index, "height", e.target.value)
+                        }
+                        className="bg-white"
+                      />
+                    </div>
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => removeFurnitureItem(index)}
+                    className="text-gray-500 hover:text-gray-700"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
                 </div>
-              </div>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => removeFurnitureItem(index)}
-                className="text-gray-500 hover:text-gray-700"
-              >
-                <Trash2 className="h-4 w-4" />
-              </Button>
+              ))}
             </div>
-          ))}
-        </div>
+          </div>
 
-        <Button
-          type="button"
-          onClick={addFurnitureItem}
-          className="w-full bg-[#E8F8F8] text-primary hover:bg-[#d8f1f1]"
-          variant="ghost"
-        >
-          <Plus className="mr-2 h-4 w-4" /> Add Item
-        </Button>
+          {/* Add Item button remains fixed at the bottom */}
+          <Button
+            type="button"
+            onClick={addFurnitureItem}
+            className="w-full bg-[#E8F8F8] text-primary hover:bg-[#d8f1f1] mb-4"
+            variant="ghost"
+          >
+            <Plus className="mr-2 h-4 w-4" /> Add Item
+          </Button>
 
-        <Button
-          type="submit"
-          onClick={handleSubmit}
-          className="w-full"
-          disabled={!room.name || room.items.length === 0}
-        >
-          {isEditing ? "Update Room" : "Add Room"}
-        </Button>
-      </CardContent>
-    </Card>
+          <Button
+            type="submit"
+            onClick={handleSubmit}
+            className="w-full"
+            disabled={!isValidForm}
+          >
+            {isEditing ? "Update Room" : "Add Room"}
+          </Button>
+        </CardContent>
+      </Card>
+    </div>
   );
 };
 

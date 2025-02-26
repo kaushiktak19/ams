@@ -8,17 +8,22 @@ import { StepBackIcon as Stairs, CableCarIcon as Elevator, Home, Info } from "lu
 
 interface Apartment {
   address: string;
-  floor: number;
+  floor: number | "";
   stairsOrElevator: string;
-  size: number;
+  size: number | "";
 }
 
 const ApartmentForm = () => {
   const [formData, setFormData] = useState<Apartment>({
     address: "",
-    floor: 0,
+    floor: "",
     stairsOrElevator: "stairs",
-    size: 0,
+    size: "",
+  });
+
+  const [errors, setErrors] = useState({
+    address: "",
+    floor: "",
   });
 
   const navigate = useNavigate();
@@ -43,7 +48,7 @@ const ApartmentForm = () => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: name === "floor" || name === "size" ? Number(value) : value,
+      [name]: name === "floor" || name === "size" ? value === "" ? "" : Number(value) : value,
     }));
   };
 
@@ -54,8 +59,18 @@ const ApartmentForm = () => {
     }));
   };
 
+  const validate = () => {
+    const newErrors = { address: "", floor: "" };
+    if (!formData.address) newErrors.address = "Address is required.";
+    if (formData.floor === "" || formData.floor <= 0) newErrors.floor = "Floor must be a positive number.";
+    setErrors(newErrors);
+    return Object.values(newErrors).every((error) => error === "");
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!validate()) return;
+
     try {
       if (id) {
         await axios.put(`http://localhost:5000/api/apartments/${id}`, formData);
@@ -71,24 +86,30 @@ const ApartmentForm = () => {
   return (
     <Card className="w-full max-w-2xl mx-auto mt-10">
       <CardHeader className="text-center">
-        <CardTitle className="text-2xl font-bold">{id ? "Edit Apartment" : "Add Apartment"}</CardTitle>
-        <CardDescription>Fill in all info correctly</CardDescription>
+        <CardTitle className="text-2xl font-semibold">{id ? "Edit Apartment" : "Add Apartment"}</CardTitle>
+        <CardDescription>Fill in all the details correctly to proceed.</CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
+        {/* Address Field */}
         <div className="space-y-2">
-          <label className="text-sm font-medium">What address are you moving from?</label>
+          <label className="text-sm font-medium">Apartment Address</label>
           <Input
             placeholder="Enter address"
             name="address"
             value={formData.address}
             onChange={handleChange}
             required
+            className={`${
+              errors.address ? "border-red-500" : "border-gray-300"
+            } focus:ring-indigo-500 focus:border-indigo-500`}
           />
+          {errors.address && <p className="text-xs text-red-500">{errors.address}</p>}
         </div>
 
+        {/* Stairs or Elevator Field */}
         <div className="space-y-2">
           <label className="text-sm font-medium">
-            Stairs or an Elevator needed? <span className="text-muted-foreground">(choose one)</span>
+            Stairs or Elevator Needed? <span className="text-muted-foreground">(choose one)</span>
           </label>
           <div className="grid grid-cols-3 gap-4">
             <Button
@@ -118,17 +139,24 @@ const ApartmentForm = () => {
           </div>
         </div>
 
+        {/* Floor Field */}
         <div className="space-y-2">
           <label className="text-sm font-medium">What floor are you on?</label>
           <Input
             type="number"
             name="floor"
-            value={formData.floor}
+            value={formData.floor !== "" ? formData.floor : ""}
             onChange={handleChange}
             required
+            placeholder="Enter floor number"
+            className={`${
+              errors.floor ? "border-red-500" : "border-gray-300"
+            } focus:ring-indigo-500 focus:border-indigo-500`}
           />
+          {errors.floor && <p className="text-xs text-red-500">{errors.floor}</p>}
         </div>
 
+        {/* Apartment Size Field */}
         <div className="space-y-2">
           <label className="text-sm font-medium">
             Apartment size <span className="text-muted-foreground">(Optional)</span>
@@ -138,8 +166,9 @@ const ApartmentForm = () => {
               type="number"
               name="size"
               placeholder="Enter apartment size"
-              value={formData.size}
+              value={formData.size !== "" ? formData.size : ""}
               onChange={handleChange}
+              className="w-full"
             />
             <Button variant="secondary" className="whitespace-nowrap" disabled>
               Sq Meter
@@ -147,16 +176,20 @@ const ApartmentForm = () => {
           </div>
         </div>
 
+        {/* Info Text */}
         <div className="flex items-center space-x-2 text-sm text-muted-foreground">
           <Info className="h-4 w-4" />
           <p>Your info is safe with us! We need details to create the perfect plan for you.</p>
         </div>
 
+        {/* Buttons */}
         <div className="flex justify-between pt-4">
           <Button variant="outline" onClick={() => navigate("/")}>
             Back
           </Button>
-          <Button onClick={handleSubmit}>{id ? "Update Apartment" : "Add Apartment"}</Button>
+          <Button onClick={handleSubmit}>
+            {id ? "Update Apartment" : "Add Apartment"}
+          </Button>
         </div>
       </CardContent>
     </Card>
